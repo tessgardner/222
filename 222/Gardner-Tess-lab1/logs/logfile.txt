@@ -1,0 +1,4 @@
+2024-09-2024 11:25:45 INFO: This is a message.
+2024-09-2024 11:26:13 ERROR: Something went wrong!
+2024-09-2024 11:31:19 INFO: Another message
+

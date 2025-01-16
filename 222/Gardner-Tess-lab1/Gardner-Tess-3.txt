@@ -1,0 +1,97 @@
+    1  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    2  sudo dpkg -i google-chrome-stable_current_amd64.deb
+    3  google-chrome
+    4  sudo aptupdate
+    5  sudo apt update
+    6  sudo apt install wget gpg apt-transport-https
+    7  wget -qO- https://packages.microsoft.com/keys/microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    8  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    9  sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+   10  echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+   11  rm packages.microsoft.gpg
+   12  sudo apt update
+   13  sudo apt install code
+   14  lsl
+   15  ls
+   16  cd Docs
+   17  ls
+   18  sudo apt install python3
+   19  python3 hello.txt
+   20  ls
+   21  cd~
+   22  cd ..
+   23  wget https://discord.com/channels/1280515363364274186/1313599763207422044/1316860473622269993
+   24  mk filesystem-lab
+   25  mkdir filesystem-lab
+   26  ls
+   27  touch problem-1.txt
+   28  mv problem-1.txt filesystem-lab
+   29  cd filesystem-lab
+   30  ls
+   31  cd ..
+   32  ls
+   33  mkdir Gardner-Tess-lab1
+   34  mv filesystem-lab Gardner-Tess-lab1
+   35  ls
+   36  cd Gardner-Tess-lab1/
+   37  ls
+   38  cd filesystem-lab/
+   39  ls
+   40  cd ~
+   41  grep -P "^dog$"
+   42  rmdir Gardner-Tess-lab1/
+   43  cd Gardner-Tess-lab1/
+   44  cd filesystem-lab/
+   45  ls
+   46  cd ..
+   47  cd ~
+   48  cd
+   49  ls
+   50  cd Docs
+   51  ls
+   52  cd grep-practice
+   53  ls
+   54  wget https://raw.githubusercontent.com/jcoriell/download/main/regex-sample.txt
+   55  wget https://raw.githubusercontent.com/dwyl/english-words/master/words.txt
+   56  cd ~
+   57  sudo apt install net-tools
+   58  sudo apt install vsftpd
+   59  ifconfig
+   60  cd Docs/grep-practice/
+   61  ls
+   62  more regex-sample.txt
+   63  more words.txt
+   64  grep -P "abc" regex-sample.txt
+   65  cd ~
+   66  ifconfig
+   67  ls
+   68  more 1316860473622269993
+   69  ls
+   70  more 1316860473622269993.1
+   71  ifconfig
+   72  clear
+   73  mkdir my-favorite-reads
+   74  cd my
+   75  cd md myhistory -c
+   76  clear
+   77  ls
+   78  cd my-favorite-reads/
+   79  wget https://www.gutenberg.org/cache/epub/11/pg11.txt
+   80  ls
+   81  mv pg11.txt > alice.txt
+   82  mv pg11.txt  alice.txt
+   83  ls -l alice.txt 
+   84  chmod 644
+   85  chmod 644 alice.txt 
+   86  ls -l
+   87  grep Cheshire alice.txt 
+   88  grep -o "Cheshire" aicetxt | wc -l
+   89  cd Gardner-Tess-lab1/
+   90  s
+   91  ls
+   92  cd my-favorite-reads/
+   93  grep -o "Cheshire" aicetxt | wc -l
+   94  grep -o "Cheshire" alice.txt | wc -l
+   95  cd 
+   96  cd Gardner-Tess-lab1/
+   97  history > Gardner-Tess-3.txt

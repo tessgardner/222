@@ -1,0 +1,115 @@
+**** COMPUTER SYSTEMS: ****
+* a computer system consists of hardware and system software that work
+  together to run programs
+	* example: hello.c file
+	#include <stdio.h>
+	
+	int main() {
+		printf("Hello World");
+		return 0
+	}
+
+* the program begins as a "source file" that's created & modified by a
+  programmer and then saved in a text file, hello.c
+* the source file (AKA program) is a sequence of bits, each with a value of 
+  0 or 1
+* these are usually organized into 8-bit chunks called bytes
+* each byte represents some text character in teh program(ASCII)
+* each byte has an integer value which then corresponds to some ASCII 
+  character
+	* example: 
+	  #   i    n    c    l    u    d    e
+	  35  105  110  99   108  117  100  101
+
+* files such as hello.c, which have just ASCII, are known as text files. all other files are 
+  known as bianry files
+* all info in a system including disk files, programs stored in memory, and user data stored
+  in memory, is represented as bits.
+* the only differnce is that text files are meant for PEOPLE to read, and binary files
+  are for COMPUTERS to read
+
+COMPILATION SYSTEMS
+* we write the hello program as a high-level C program, since its easier
+  for humans to read and understand
+* however, for the system to read, it must TRANSATE the individual C statements into a 
+  sequence of low-level machine instructions
+* COMPILATION SYSTEM STEPS:
+	1. processing (cpp)
+		* modifies the hello.c program according to directives that begin with #
+		* for example: #include <stdio.h> in hello.c tells the processor to read the contents
+		  of the system header and insert it into the program text
+		  * input: hello.c 
+		  * output: hello.i
+	2. compilation (cc1)
+		* translates the hello.i into the text file hello.s, which is an assembly-language
+		  program.
+		* each statement in an assembly language program describes exactly one low-level 
+		  machine-language instruction in a stadard text form
+		* input: hello.i
+		* output: hello.s
+	3. assembly (as)
+		* translates hello.s into machine language instructions, packages them into a known
+		  form called 'relocatable object program', and stores the result in hello.o
+		* hello.o is a binary file whose bytes encode machine language instructions 
+		  instead of characters. in a text editor, it appears to be gibberish
+		* input: hello.s
+		* output: hello.o
+	4. linking (ID)
+		* printf is part of the standard C library, provided by every C compiler
+		* the printf function resides in a separate precompiled object file called printf.o,
+		  which will be merged with out hello.o program
+		* this step handles the merging process!
+		* the result is the hello file, which is now an executable object file (AKA executable)
+		  that's ready to be loaded into memory and executed by the system
+		* input: hello.o
+		* output: hello
+
+HARDWARE INTERACTIONS
+* our hello.c program has now been translated by the compilation system into an executable object file called
+  "hello" that is stored on the disk
+* to run the executable on a Unix system, we type its name into a shell
+* to understand what happens to our hello program when we run it, we need to understand the hardware 
+  organization of a typical system:
+	BUSES
+	* running throughout the system, there's a collection of electrical conduits called 'busses'
+	* busses carry bytes of info back and forth between components and are designed to transfer
+	  bytes (usually 4 or 8 bytes)
+	I/O DEVICES
+	* I/O devices are the system's connection to the external world
+	* some typical I/O devices: keyboard, mouse, display, disk
+	* the hello executable inidially resides on the disk
+	MAIN MEMORY 
+	* main memory is a tempory storage device that holds a program AND the data it manipulates while the 
+	  processor is executing the program
+	PROCESSOR
+	* the CPU (AKA processor) is the engine/brain that executes instructions that are stored in main memory
+	* at its core is a register called the program counter (PC)
+	* at any point in time, the PC points at (contains the address of!) some machine-language instruction
+	  in main memory
+	* from the time that power is applied to the system until it's shut off, a processor repeatedly executes 
+	  the instruction pointed at by the PC and updates to point at the next instruction
+	* the processor reads the instruction from memory pointed at by the PC, interprets the bits in the 
+	  instruction, performs some simple operation dictated by the instruction, and then updates the PC to point 
+	  at the next instruction
+	OS CONTROLS THE HARDWARE
+	* when the shell loaded and ran the hello program, and when the hello program printed its message, neither
+	  program (hello or the shell) directly accessed the keyboard, display disk, main memory, etc
+	* instead, they relied on the operating system (OS)
+	* we can think of the OS as a layer of software interposed between the application program and the hardware
+	* OS has two primary purposes:
+		1. project the hardware from misuse by runaway applications
+		2. provide applications with simple and uniform mechanisms for manipulating complicated and often 
+		   wildly different low-evel hardware devices
+	* the OS achieves both goals via the fundamental abstractions:
+		1. processes
+			* this is the OS's abstraction for running a program
+			* multiple processes can run concurrently on the same system, and each process appears to have
+			  exclusive use of the hardware
+		2. virtual memory
+			* an abstraction that provides each process with the illusion that it has exclusive use of 
+			  the main memory
+		3. files
+			* a file is a sequence of bytes
+			* every I/O device is modeled in a file
+			* all input and output in the system is performed by reading and writing files using a small 
+			  set of system calls (in Unix this is called Unix I/O)

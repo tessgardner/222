@@ -1,0 +1,11 @@
+    1  mkdir filesystem-lab
+    2  cd filesystem-lab/
+    3  touch problem-1.txt
+    4  cd ..
+    5  ls -a -alh
+    6  ls -a -alh > filesystem-lab/problem-1.txt 
+    7  more filesystem-lab/problem-1.txt 
+    8  rm -rf filesystem-lab/
+    9  mkdir Gardner-Tess-lab1
+   10  cd Gardner-Tess-lab1/
+   11  history > Gardner-Tess-1.txt

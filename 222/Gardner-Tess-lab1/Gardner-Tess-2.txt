@@ -1,0 +1,12 @@
+    1  clear
+    2  cd Gardner-Tess-lab1/
+    3  mkdir my_python_files
+    4  cd my_python_files/
+    5  wget hhtps://raw.githubusercontent.com/jcoriell/download/main/hello_you.py
+    6  wget https://raw.githubusercontent.com/jcoriell/download/main/hello_you.py
+    7  ls
+    8  python3 hello_you.py
+    9  vim hello_you.py 
+   10  python3 hello_you.py
+   11  cd ..
+   12  history > Gardner-Tess.txt

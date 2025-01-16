@@ -1,0 +1,2 @@
+ls /usr/bin | more | grep -P "^a" && ls /usr/bin | grep -P "^a" | wc -l
+^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.([a-zA-Z0-9-]*\.)^C-zA-Z]{2,}$

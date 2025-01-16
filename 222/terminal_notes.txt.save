@@ -1,0 +1,183 @@
+********** THE LINUX TERMINAL **********
+
+*** BASIC TERMINAL CONTROLS ***
+* Up arrow = previous command
+* Down arrow = next command
+* Tab = auto complete
+* Ctrl + l = clears screen
+* Ctrl + c = cancel/void command
+* Ctrl + a = move to start of line
+* Ctrl + e = move to end of line
+* Ctrl + r = search
+* Ctrl + shift + c = copy
+* Ctrl + shift + v = paste
+
+
+*** BASIC COMMANDS ***
+* sudo = use when executing command as admin (which is why you have to enter password when using sudo)
+* pwd = print working directory
+* mkdir [directory name] = make new directory
+* touch [filename] = make a new file
+* ls = list contents of a directory
+	* ls -a = list all files including hidden ones
+	* ls -al = list all files and their details in a human readable format
+	* ls -l = lists all file permissions. the first column is the permissions, and the third and fourth tell us who the user and group is of the file
+* cd 
+	* cd [destination] = move directories
+	* cd . . = directory above where you currently are
+* man [command] = shows manual for a command
+* / = root directory
+* ~ = home directory
+* rm
+	* rm  [filename] = remove a file
+	* rm -rf = remove folder and everything in it
+	* rmdir [directory name] = remove a directory 
+* cat [filename] = show file contents
+* more [filename] = show file contents in paginated format
+* echo [message] = repeat a message
+* cp [source][destination] = copies a file from the source to a destination
+* mv [source][destination] = moves a file from source to destination
+* history = shows command history
+* history -c = clears history
+* clear = clears screen
+* wget [url] = download contents at provided URL
+
+
+*** REDIRECTION ***
+> = STANDARD OUTPUT
+	* Used to redirect the result of a command somewhere else
+	* The contents of the file are overwritten when using >
+	* >> can be used to append contents of a file
+	* Right side of standard output is a LOCATION
+		* ex: echo “hello world” > helloworld.txt
+	* < = STANDARD INPUT
+	* Can be used to put input into a program
+	* 2> = STANDARD ERROR
+	* Direct an error elsewhere
+	* Can append with 2>>
+		* ex: notrealcommand 2> error-file.txt
+
+|= PIPE
+	* Creates a pipeline between two programs
+	* Takes the output of one command and uses it as input of another command
+	* Right side of piping is a COMMAND
+		* ex: ls -al /usr/bin | more → lists contents of usr/bin but uses more to view them in a paginated way
+
+*** TEXT EDITORS ***
+VIM
+	* Terminal based text editor
+	* vim helloworld.txt = opens the file in vim
+	* i = switch to insert mode
+	* v = visual mode
+	* shift + r = replace
+	* : = used for commands
+	* :wq = save and quit
+	* use esc to get out of i and then you can go back to using comments instead of editing the text
+	* Run vimtutor to learn more!
+
+NANO
+	* A simpler terminal based text editor
+	* nano helloworld.txt = opens the file in nano
+	* now can type into the editor
+	* ctrl + x = save and close
+
+
+*** FILE PERMISSIONS ***
+CHARACTER FILE PERMISSIONS
+	* File permissions are expressed with a 10 character string
+		* ex: drwxr-xr-x 2 josh josh 4096 Nov 29 15:32 Desktop
+	* FIRST CHARACTER: type of file
+		* - = file
+		* d = directory
+		* l = link
+	* The last 9 characters are split into 3 different permission classes
+		* (u) First three: the owner’s permissions
+		* (g) Second three: the group’s permissions
+		* (o) Third three: all other users’ permissions
+		* a = if you’re referring to all 3 at once
+	* The different types of permissions are:
+		* r = read
+		* w = write
+		* x = execute
+	* Each permission class will be a combo of these 3 different types of permissions to tell us what each user has access to
+	* chmod = command used to change file permissions
+	* To add permissions, combine a usertype character with + and one or more of the permission characters
+		* ex: chmod u+rwx filename
+		* This gives read, write, and execute permissions to the owner
+	* To remove permissions, combine a usertype character with - and one or more of the permission characters
+		* ex: chmod g-x filename
+		* This remove execute permissions from the group
+
+NUMERIC FILE PERMISSIONS
+	* The numeric values for each type of permission:
+		* r = 4
+		* w = 2
+		* x = 1
+	* This way, we can write a numeric value of 3 digits instead of 9 characters in a string
+		* ex:	r w x	r - x	r - x
+			4 2 1	4   1   4   1
+		Totals:   7	  5       5
+	* chmod 766 filename = how we change permissions using numbers
+	* sudo chown [owner][:group] [filename] = change ownership of a file
+
+
+*** GREP ***
+* grep stands for Globally search for a Regular Expression and Print
+* grep testing name1.txt = searching for ‘testing’ in name1.txt
+*	* = wild card
+* grep testing name*.txt = searching for the word ‘testing’ in any file with the format name*.txt (ex: name4.txt)
+* grep testing * = searching for ‘testing’ in ANY file
+* grep -l test *.txt = -l shows file names, not the content
+* grep -i testing name*.txt = i ignores case
+* grep -ir testing * = -r searches recursively
+* Regular expressions are used to express patterns within text
+* Using them with grep can result in powerful searches
+* -P = exact matching of words, characters, phrases
+		* ex: grep -P “abc” example.txt 
+* -v = INVERTS a search, will give anything that doesn’t contain what’s in the command
+* -o = makes grep output only the matching part of the line, not the entire line
+* Some characters require a slash in front of them because they have a special meaning already 
+* These are the main ones: ., [, {, (, \, ^, $, , ?, *, +
+	* example: grep -P “\.” example.txt 
+	* This is looking for a dot
+* You can specify different types of characters like digits or whitespace, and you need to use the -P flag:
+.           any character except new line
+\d         digit (0-9)
+\D         not a digit (not 0-9)
+\w          a Word character (a-z, A-Z, 0-9, _)
+\W         not one of the word characters
+\s          whitespace (space, tab, newline)
+\S          note whitespace
+
+ex: grep -P “\d\d\d” notes.txt searches for three consecutive digits
+
+BOUNDARIES:
+\b          word boundary
+\B          not a word boundary
+^           beginning of a line
+$           end of a line
+
+* ex: grep -P “^a…b” notes.txt 
+* Starts with a, 5th letter is b
+
+GROUPINGS
+[ ]          matches characters in brackets
+[^ ]        matches characters not in brackets
+|           or
+()          group
+	* ex: grep -P “[a-zA-Z]” notes.txt
+	* Finds any character from a to z or A to Z
+
+QUANTIFIERS	
+* Help us say how many of a type of character or characters we might want in parts of the expression
+*           0 or more
++           1 or more, matches as many consecutive digits and dashes as possible 
+?           0 or one
+{3}         exact number (exactly 3 here)
+{1,5}      range {min, max} (minimum of 1, max of 5)
+	* ex: grep -P -o "\.[a-zA-Z]{3}" regex-sample.txt 
+	* -o shows only non empty parts
+	* find occurrence of a dot followed by 3 characters in a-z or A-Z
+* && = the command before && must complete without error for the second command to execute
+* || = the command before || MUST result in an error for the command after to execute
+* ; = separates 2 commands on the same line

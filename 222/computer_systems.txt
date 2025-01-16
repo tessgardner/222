@@ -6,7 +6,7 @@
 	
 	int main() {
 		printf("Hello World");
-		return 0
+		return 0;
 	}
 
 * the program begins as a "source file" that's created & modified by a
@@ -14,7 +14,7 @@
 * the source file (AKA program) is a sequence of bits, each with a value of 
   0 or 1
 * these are usually organized into 8-bit chunks called bytes
-* each byte represents some text character in teh program(ASCII)
+* each byte represents some text character in the program(ASCII)
 * each byte has an integer value which then corresponds to some ASCII 
   character
 	* example: 

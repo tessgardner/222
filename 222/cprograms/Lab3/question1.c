@@ -1,19 +1,28 @@
 #include <stdio.h>
 
 int main(int argc, char *argv[]){
-    // ^ a standard signature for taking in command line arguments
-    // argc represents the number of arguments coming in. 
-    // argv a pointer to where the arguments are stored in memory
     
-    // printing the inputs
-    printf("argc: %d\n", argc);
-    
-    for (int i=0; i < argc; i++){
-        printf("argv[%d]: %s\n", i, argv[i]);
+
+    if (argc < 3) {
+        printf("Must provide at least 2 arguments.");
+    } 
+    else if (argc > 7) {
+        printf("Must provide at most 6 arguments.\n");
+    }
+    else {
+            for (int i=1; i < argc; i++){
+        if (i % 2 == 0) {
+            /*found an article on narkive(newsgroup archive) for how 
+            to access individual char or a string in an array */
+            printf("%c ", argv[i][0]);
+        }
+        else {
+            printf("%c ", argv[i][1]);
+        }
     }
 
-    // argv ends with a null pointer
-    printf("argv[%d]: %s\n", argc, argv[argc]);
-
+    printf("\n");
+    }
+    
     return 0;
 }

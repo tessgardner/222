@@ -70,14 +70,14 @@ HARDWARE INTERACTIONS
 * to run the executable on a Unix system, we type its name into a shell
 * to understand what happens to our hello program when we run it, we need to understand the hardware 
   organization of a typical system:
-	BUSES
+	BUSSES
 	* running throughout the system, there's a collection of electrical conduits called 'busses'
 	* busses carry bytes of info back and forth between components and are designed to transfer
-	  bytes (usually 4 or 8 bytes)
+	  bytes (usually 4 or 8 bits)
 	I/O DEVICES
 	* I/O devices are the system's connection to the external world
 	* some typical I/O devices: keyboard, mouse, display, disk
-	* the hello executable inidially resides on the disk
+	* the hello executable initially resides on the disk
 	MAIN MEMORY 
 	* main memory is a tempory storage device that holds a program AND the data it manipulates while the 
 	  processor is executing the program
@@ -99,7 +99,7 @@ HARDWARE INTERACTIONS
 	* OS has two primary purposes:
 		1. project the hardware from misuse by runaway applications
 		2. provide applications with simple and uniform mechanisms for manipulating complicated and often 
-		   wildly different low-evel hardware devices
+		   wildly different low-level hardware devices
 	* the OS achieves both goals via the fundamental abstractions:
 		1. processes
 			* this is the OS's abstraction for running a program

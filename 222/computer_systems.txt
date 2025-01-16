@@ -73,7 +73,7 @@ HARDWARE INTERACTIONS
 	BUSSES
 	* running throughout the system, there's a collection of electrical conduits called 'busses'
 	* busses carry bytes of info back and forth between components and are designed to transfer
-	  bytes (usually 4 or 8 bits)
+	  bytes (usually 4 or 8 bytes)
 	I/O DEVICES
 	* I/O devices are the system's connection to the external world
 	* some typical I/O devices: keyboard, mouse, display, disk

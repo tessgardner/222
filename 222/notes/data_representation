@@ -1,0 +1,14 @@
+DATA REPRESENTATION
+
+Binary Representations:
+* Base 2 Number Representations:
+    * represents 15213 (base 10) -> 11101101101101 (base 2)
+    * represents 1.15213 (base 10) -> 1.1101101101101 * 2^13
+
+* Encoding Byte Values:
+    * a byte is 8 bits
+    * binary: 00000000 - 111111111
+    * hexadecimal: 0 - FF
+        * base 16 number Representations
+        * uses 0-9 and A-FF
+        * write FA1D37B (base 16) in C as 0xFA1D37B or 0xfa1d37b

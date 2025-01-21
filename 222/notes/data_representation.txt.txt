@@ -1,0 +1,199 @@
+DATA REPRESENTATION
+
+Binary Representations:
+* Base 2 Number Representations:
+    * represents 15213 (base 10) -> 11101101101101 (base 2)
+    * represents 1.15213 (base 10) -> 1.1101101101101 * 2^13
+
+Encoding Byte Values:
+* a byte is 8 bits
+* binary: 00000000 - 111111111
+* hexadecimal: 0 - FF
+    * base 16 number Representations
+    * uses 0-9 and A-FF
+    * write FA1D37B (base 16) in C as 0xFA1D37B or 0xfa1d37b
+* decimal: 0 - 255
+
+Machine Words
+* Machine has a "Word Size"
+* most current machines are 64-bit (8 bytes)
+    * potentially address 1.8 * 10^19 bytes
+* older machines are 32.bit (4 bytes)
+    * limit addresses to 4 GB
+    * too small for memory-intensive applications
+* machines support multiple data formats
+    * fractions or multiple word Size
+    * always integral number of bytes
+
+Word Oriented Memory Organization:
+* addresses specify byte locations
+    * address of first byte in word
+    * addresses of successive words differ by 4 (32-bit) or 8 (64-bit)
+
+Byte Ordering
+* 2 conventions:
+    1. big endian: leas significant byte has the highest address
+    2. little endian: leas significant byte has the lowest address
+        * example:
+            * variable X: 0x1234567
+            * address given as &X: 0x100
+                                0x98    0x99    0x100   0x101   0x102   0x103   0x104
+                BIG ENDIAN:                     01      23      45      67     
+                LITTLE ENDIAN:                  67      45      23      01
+
+Data Representations: Sizes of C data types (int bytes)
+
+    TYPE    64-BIT  32-BIT 
+    int
+    short
+    float
+    double
+    char *    
+
+Boolean Algebra
+* developed by George Boole in the 19th century
+* encode true as 1 and false as 0 
+* and = A&B = 1 when A and B = 1
+* or = A|B = 1 when A or B = 1
+* not = ~A = 1 when A = 0
+* xor (exclusive or) = A^B = 1 when either A or B = 1, but NOT both
+
+Properties of & and ^/|
+* commutative sum: A^B = B^A 
+* commutative product: A*B = B*A 
+* associative sum: (A^B)^C = A^(B^C)
+* associative product: (A&B)&C = A&(B&C)
+* product over sum (distribution): A&(B^C) = (A^B)&(A^C)
+* 0 is the sum identity: A^0 = a
+* 1 is the product identity: A&1 = A 
+* additive inverse: A^A = 0
+
+Bit Level Operations in C:
+* operations:
+   * available operators: & (AND), | (OR), ~ (NOT), ^ (XOR)
+* applicable data types:
+   * operations can be applied to: long, int, short, char
+* key points:
+   * arguments are treated as **bit-vectors**.
+   * Operators are applied **bitwise** (one bit at a time).
+* examples: 
+    1. Bitwise NOT (~):
+      Input:  0x49 (binary: 01001001)
+      Output: 0xB6 (binary: 10110110)
+
+      Input:  01001001 (binary)
+      Output: 10110110 (binary)
+
+      Input:  0x41 (binary: 01000001)
+      Output: 0xBE (binary: 10111110)
+
+      Input:  010000001 (binary)
+      Output: 101111110 (binary)
+
+      Input:  0x00 (binary: 00000000)
+      Output: 0xFF (binary: 11111111)
+
+      Input:  00000000 (binary)
+      Output: 11111111 (binary)
+
+    2. Bitwise AND (&):
+      Inputs:  0x69 (binary: 01101001)
+                0x55 (binary: 01010101)
+        Operation:
+        01101001
+        & 01010101
+        ----------------
+        01000001
+        Output: 0x41 (binary: 01000001)
+
+    3. Bitwise OR (|):
+      Inputs:  0x69 (binary: 01101001)
+                0x55 (binary: 01010101)
+        Operation:
+        01101001
+        | 01010101
+        ----------------
+        01111101
+        Output: 0x7D (binary: 01111101)
+
+logical operators:
+* operators:
+   * && (logical AND), || (logical OR), ! (logical NOT)
+* rules:
+   * view `0` as FALSE.
+   * any non-zero value is considered TRUE.
+   * logical operators always return `0` (FALSE) or `1` (TRUE).
+*  examples:
+   1. Logical NOT (`!`):
+        Input:  0x41 (TRUE, non-zero)
+        Operation: !0x41
+        Output:   0x00 (FALSE)
+
+        Input:  0x00 (FALSE, zero)
+        Operation: !0x00
+        Output:   0x01 (TRUE)
+
+        Input:  0x41 (TRUE, non-zero)
+        Operation: !!0x41
+        Output:   0x01 (TRUE)
+
+   2. Logical AND (`&&`):
+        Inputs:  0x69 (TRUE, non-zero)
+                 0x55 (TRUE, non-zero)
+        Operation: 0x69 && 0x55
+        Output:    0x01 (TRUE)
+
+   3. Logical OR (`||`):
+       Inputs:  0x69 (TRUE, non-zero)
+                 0x55 (TRUE, non-zero)
+        Operation: 0x69 || 0x55
+        Output:    0x01 (TRUE)
+
+Shift Operations (Bitwise):
+1. Left Shift (`x << y`):
+    * Shifts the bit-vector `x` to the **left** by `y` positions.
+    * What happens:
+        * Extra bits on the **left** are discarded.
+        * New bits on the **right** are filled with `0`s.
+        * Example:
+              Input:  `x = 0b01100010` (binary representation of x)
+              Operation: `x << 3`
+            Result:    `0b00010(000)` (shifted left by 3, 3 new `0`s added on the right)
+2. Right Shift (`x >> y`):
+    * Shifts the bit-vector `x` to the **right** by `y` positions.
+    * Two types of right shifts:
+        a. Logical Right Shift:
+            * Fills new bits on the **left** with `0`s.
+            * Example:
+              Input:  `x = 0b01100010`
+              Operation: `x >> 2` (logical shift)
+                Result:    `0b(00)011000` (shifted right by 2, 2 new `0`s added on the left)
+        b. Arithmetic Right Shift:
+            * Fills new bits on the **left** with the **most significant bit (MSB)** (the leftmost bit).
+            * This preserves the sign for two's complement integer representations.
+            * Example:
+                * Input:  `x = 0b01100010` (positive number, MSB = `0`)
+                * Operation: `x >> 2` (arithmetic shift)
+                    Result:    `0b(--)011000` (same as logical for positive numbers)
+            * example:
+                * Input:  `x = 0b10100010` (negative number, MSB = `1`)
+                * Operation: `x >> 6` (arithmetic shift)
+                    Result:    `0b(111111)10` (6 bits of `1` added to preserve the sign)
+*  Key Takeaways:
+    * Left shifts always add `0`s on the right.
+    * Logical right shifts add `0`s on the left.
+    *Arithmetic right shifts replicate the MSB on the left, preserving the sign for negative numbers in two's complement representation.
+* Examples:
+- **Example 1:**
+    - Input:  `x = 0b01100010`
+    - Operations:
+    - Left Shift (`x << 3`):    `0b00010(000)`
+    - Logical Right Shift (`x >> 2`): `0b(00)011000`
+    - Arithmetic Right Shift (`x >> 2`): `0b(--)011000` (same result here, as MSB is `0`)
+- **Example 2:**
+    - Input:  `x = 0b10100010`
+    - Operations:
+    - Left Shift (`x << 4`):    `0b0010(0000)`
+    - Logical Right Shift (`x >> 3`): `0b(000)10100`
+    - Arithmetic Right Shift (`x >> 6`): `0b(111111)10` (fills with `1`s to preserve sign)
+

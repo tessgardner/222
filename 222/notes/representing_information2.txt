@@ -1,0 +1,296 @@
+**** REPRESENTING INFORMATION ****
+
+UNSIGNED/SIGNED INTEGERS:
+* Unsigned integers:
+    * an unsigned integer is a non-negative integer
+    * in an n-bit system, unsigned integer is represented as:
+        * X = x(w-1)x(w-2)...x(1)x(0)
+    * the VALUE of this number is calculated as:
+        * B2U(X) = (sum from i = 0 to w-1)x(i)*2^i (SUMMATION)
+        * this formula sums up the weighted values for each bit
+        * the MSB (most significant bit) has the hihest weight (2^(w - 1))
+        * the LOWEST bit has a weight of 2^0
+* Signed integers: (using two's complement)
+    * a SIGNED integer can be positive OR negative
+    * the MSB (left-most bit) is used as the sign bit:
+    * 1 = negative in most significant bit
+    * 0 = Positive
+    * the value of a signed number is calculated differently based on the MSB 
+        * two's complement formula:
+            * B2T(X) = -x(w-1)*2^w-1 + (sum from i = 0 to w-2)x(i)*2^i
+        * when the MSB is 1 and there's a neg weight, the value is calculated by 
+          subtracting the weightof the MSB from the sum of the other weighted bits
+        * example:
+            char x = 123: 01111011
+            weight calculation:
+            WEIGHT  VALUE
+            1       1
+            2       1
+            4       0
+            8       1
+            16      1
+            32      1
+            64      1
+            128     0
+                 + __
+                = 123
+            char y = -123: 10000101
+            weight calculation:
+            WEIGHT  VALUE
+            1       1
+            2       1
+            4       0
+            8       1
+            16      1
+            32      1
+            64      1
+            128     1
+                 + __
+                = -123
+
+NUMERIC RANGES
+* Unsigned Values:
+    * UMin = 0
+    * Umax = (2^w)-1
+* Two's Complement
+    * TMin = -2^w-1 (smallest neg value than can be represented)
+    * Tmax = (2^(w-1)) -1 (largest pos value that can be represented)
+*example: w = 16
+            Decimal     Hex         Binary
+    UMax     65535      FF FF     11111111 11111111  
+    TMax     32767      7F FF     01111111 11111111
+    TMin    -32768      80 00     10000000 00000000       
+    -1           -1     FF FF     11111111 11111111  
+    0             0     00 00     00000000 00000000       
+* Word Sizes:
+    * range of diff word sizes (8, 16, 32, 64 bits) can be calculated
+      using the formulas:
+                8       16          32              64
+        UMax    255    65535    4294967295      ~18 quintillion
+        TMax    127    32767    2147483647      ~9 quintillion
+        TMin   -128   -32768   -2147483648      ~-9 quintillion
+* Important Observations:
+    * the absolute value of TMin is always 1 MORE than the TMax
+    * formula: |TMin| = TMax + 1
+    * example:
+        w = 16
+        |TMIN| = 32768
+        TMAX = 32768 - 1 = 32767
+   * the max unsigned value is always 2 times the max signed, plus 1
+   * formula: UMax = 2*TMax + 1
+   * example: 
+        w = 16
+        TMAX - 32767
+        UMAX = 2 * 32767 + 1 - 65535
+* C programming:
+    * in C, you can access the limits using the limits.h library:
+        * #inlude <limits.h>
+    * this library declares constants representing max and min values for various types
+    * some examples: 
+        - UCHAR_MAX (= 255)
+        - CHAR_MAX (=127)
+        - CHAR_MIN (=-128)
+        - INT_MIN
+        - INT_MAX
+        - UINT_MAX
+
+CASTING SIGNED TO UNSIGNED CASTING
+* in C, you can cast/convert between signed and unsigned types
+* this involves converting one data type (signed) to another (insigned)
+* example:
+    char x = 123;   // signed char with value 123
+    char y = -123;  // signed char with value -123
+
+    unsigned char ux = (unsigned char) x;  // cast signed char to unsigned char
+    unsigned char uy = (unsigned char) y;  // cast signed char to unsigned char
+* when casting, the bit representation does NOT change, they're just reinterpreted
+* if the value is positive, casting will result in the SAME value
+* example: 
+    char x = 123;
+    unsigned char ux = (unsigned char) x;
+    ux = 123 (n change)
+* when you cast NEGATIVE values, they change to POSITIVE
+* this happens because the signed bit in two's complement represents the -/+
+* the unsigned interpretation doesn't treat it as a sign bit
+* example:
+    char y = -123;
+    unsigned char uy = (unsigned char) y;
+    binary representation of 123: 0111 1101
+    flip the last sign:           1111 1101
+    interpreted as unsigned: 133
+    uy = 133
+* by default, C constants are treated as signed integers
+* ex: 132 is signed unless specified with 123U
+    * U shows the constant is unsigned
+* explicit casting manually tells the compilers to treat a variable as another type
+* done through the cast operator:
+* example:
+    int tx, ty;
+    unsigned ux, uy;
+
+    tx = (unsigned) ty;  // Casting signed to unsigned
+    uy = (unsigned) ty;  // Casting signed to unsigned
+    tx = (int) uy;       // Casting unsigned to signed
+* implicit casting happens automatically when assigning a value of one type to 
+  a variable of another type or when calling a function
+* such as unsigned to int
+* example:
+    tx = ux;   // Implicitly casting unsigned to signed
+    uy = ty;   // Implicitly casting signed to unsigned
+
+SIGN EXTENSION (two's complement signed values)
+* when increasing the number of bits in a signed value, sign extension 
+  ensures the value remains correct
+* when converting a signed number from w-bits to w+k bits, the EXTRA left
+  bits are filled with copies of the MSB!
+* if the MSB is 1, all the extra bits are filled with 1s
+* if the MSB is 0, all the extra bits are filled with 0s
+* example: 1001, a 4-bit signed number, to an 8-bit signed number
+    w = 4, k = 4
+    make 4 copies of the MSB, which is 1 here
+    result: 1111 1001
+
+OVERFLOW IN TWO'S Complement
+* negative overflow: when both operands are neg and the result is pos
+* positive overflow: when both operands are pos and the result is neg
+* example: assume TAdd(u, v) adds u and v together, determine if s = TAdd(u, v) overflows
+    overflow if and only if either:
+        u < 0, v < 0, s >= 0 : Negative overflow
+        u >= 0, v >= 0, s < 0 : Positive overflow
+
+POWER OF 2 MULTIPLICATION WITH SHIFT
+- Operation
+    - u << k = u * 2^k
+    - both signed and unsigned
+- Left shift x << y:
+    - Shift bit-vector x left y positions 
+    - Fill with 0's on right
+    - ex: u << 3 = u * 8
+
+POWER OF 2 DIVISION WITH SHIFT
+- Quotient of Unsigned by power of 2
+    - u >> k gives u / 2^k
+    - uses logical shift
+- Quotient of Signed by power of 2
+    - u >> k gives u / 2^k
+    - uses arithmetic shift
+- Right shift: x >> y
+    - shift bit-vector x by y positions
+    - get rid of extra values on the right
+    - Logical Shift: Fill with 0's on left
+    - Arithmetic Shift: Fill missing values with sign bit
+
+IEE 754 FLOATING POINT REPRESENTATION
+- Similar to representation fom 132 course
+- Used instead of sign - exponent - mantissa representation
+  as there are many ways to represent one number in this format,
+  unlike IEEE 754. The normalization preformed disallows this.
+- Implicit normalization is also more accurate than a possible 
+  explisit normalization.
+- Has possible precisions based on number of bits to dictate bias:
+    - 16 bits: half-point precision
+        - has 11 significand bits (includes sign bit), 
+          5 bits for the exponent
+        - bias value = 15
+    - 32 bits: single-point precision
+        - has 24 significand bits (including sign bit),
+          8 bits for the exponent
+        - bias value = 127
+    - 64 bits: double precision
+        - has 53 significant bits (including sign bit)
+        - bias value = 1023
+    - There is a quadruple and Octuple precision, 
+      but it will not be discussed further
+
+    - Extra Notes:
+        - in the case of the following for exponent = E, mantissa = m, sign = s:
+            - E = 0000 0000, M = 00000...000, S = 0 or 1
+                - This represents +0 or -0 (same value, 0)
+            - E = 1111 1111, M = 00000...000, S = 0
+                - This represents positive infinity
+            - E = 1111 1111, M = 00000...000, S = 1
+                - This represents negative infinity
+            - 1 <= E <= 254, M = xxxxx...xxx, S = 0 or 1
+                - This is where we use Implicit Normalized Form
+                - Conversion completed in class (example later)
+            - S = 0 or 1, E = 0, M != 0
+                - This represents Fractional form
+                - This case has no integer part, so we use a different formula
+            - S = 0 or 1, E = 255, M != 0
+                - This results in NAN, or Not a number
+            
+- Decoding Floating point numbers uses the following formula:
+    - (-1)^S x 1.M x 2^(E-127)
+    - M in this case is the implicit normalized form of the mantissa
+
+- If E = 0 and M != 0, use the following formula for fractional form:
+    - (-1)^S x 0.M x 2^(-126)
+     
+Examples:
+
+- Convert -4.25 to single point precision IEEE 754 floating point number:
+Step 1: convert base number (ignoring sign) to binary:
+    - 4.25 -> 100.01
+
+Step 2: Use implicit normalization to shift the radix point (decimal point)
+        to the right of the most significant bit with a value of 1.
+        This shift is done by multiplying your binary value by 2^k
+        where k is the number of positions you need to shift your radix
+        point.
+    - 100.01 -> 1.0001 x 2^2 (we choose 2^2, as we shift our value by 2 positions)
+    - the value to the right of the radix point is your new mantissa
+        - 0001 in this case. Keep leading 0's 
+    - the number your shift by, or put in as k in 2^k is your temporary
+      exponent. In this case, this is 2.
+
+Step 3: Bias your exponent by adding 127 to your temporary exponent.
+        This will be your "True Exponent". Convert this resulting
+        value to binary.
+    
+    - 2 + 127 = 129
+               -128
+               -  1
+               =  0
+    - So our binary representation is 1000 0001
+
+Step 4: Fill in your Sign, exponent, and mantissa together.
+        Your sign is based on the original value (-4.25)
+
+    S   Exponent       Mantissa
+    1   1000 0001   00010000...000
+
+    Note: fill in the mantissa section from the LEFT side, and follow
+          this value by zeros.
+
+Ex 2:
+Convert 55 to floating point:
+Step 1: 55 -> 110111
+Step 2, normalization: 110111 -> 1.10111 x 2^5, note these values
+Step 3, bias exponent: 5+127 = 132
+Step 3.1 convert to binary: 132 -> 1000 0100
+Step 4, fill in values:
+    S   Exponent       Mantissa
+    0   1000 0100   10111000...000
+
+Ex 3:
+Convert the following from IEEE 754 to Decimal
+This process is simply to follow the previous steps in the opposite direction
+
+S   Exponent       Mantissa
+0   1000 0110   11011000...000
+
+Step 1: Convert E to Decimal, and debias
+    1000 0110 = 128 + 4 + 2 = 134
+    debias: 134 - 128 = 6 <- this is the amount we shift
+
+Step 2: Build our denormalized form of the value.
+        - do this by starting with 1.x...x * 2^k, and fill it in with  
+          mantissa and debiased exponent
+        - in this case, M = 11011, k = 6
+    So we have 1.11011 x 2^6
+
+Step 3: Shift values by moving the decimal right k spaces:
+    - 1.11011 x 2^6 -> 1110110
+
+Step 4: Convert value to decimal
+    - 1110110 -> 2+4+16+32+64 = 118

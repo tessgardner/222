@@ -401,6 +401,9 @@ int calloc() {
     return 0;
 }
 
+
+// STRUCTS
+
 int main(){
 
     helloWorld();

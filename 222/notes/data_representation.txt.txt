@@ -30,13 +30,20 @@ Word Oriented Memory Organization:
     * address of first byte in word
     * addresses of successive words differ by 4 (32-bit) or 8 (64-bit)
 
-Byte Ordering
+Byte Ordering (endianness)
+* refers to how a computer stores the bytes of a multi-byte value
+* it's how integers or floating-point numbers are stored in memory
 * 2 conventions:
-    1. big endian: leas significant byte has the highest address
-    2. little endian: leas significant byte has the lowest address
+    1. big endian: 
+        * most significant byte is stored at smallest memory address
+        * least significant byte is stored at the highest address
+        * memory layout: MSB -> LSB (reading numbers left to right)
+    2. little endian: 
+        * least significant byte has the lowest address
+        * most significant byte is stored at the highest memory address
         * example:
             * variable X: 0x1234567
-            * address given as &X: 0x100
+            * address given as &X: 0x100 (&X is pointing to memory address where C is stored)
                                 0x98    0x99    0x100   0x101   0x102   0x103   0x104
                 BIG ENDIAN:                     01      23      45      67     
                 LITTLE ENDIAN:                  67      45      23      01
@@ -44,11 +51,13 @@ Byte Ordering
 Data Representations: Sizes of C data types (int bytes)
 
     TYPE    64-BIT  32-BIT 
-    int
-    short
-    float
-    double
-    char *    
+    int     4       4
+    long    8       4
+    char    1       1
+    short   2       2
+    float   4       4
+    double  8       8
+    char *  8       4
 
 Boolean Algebra
 * developed by George Boole in the 19th century

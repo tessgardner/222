@@ -181,26 +181,56 @@ POWER OF 2 DIVISION WITH SHIFT
     - Arithmetic Shift: Fill missing values with sign bit
 
 IEE 754 FLOATING POINT REPRESENTATION
-- Similar to representation fom 132 course
-- Used instead of sign - exponent - mantissa representation
-  as there are many ways to represent one number in this format,
-  unlike IEEE 754. The normalization preformed disallows this.
-- Implicit normalization is also more accurate than a possible 
-  explisit normalization.
-- Has possible precisions based on number of bits to dictate bias:
-    - 16 bits: half-point precision
-        - has 11 significand bits (includes sign bit), 
-          5 bits for the exponent
-        - bias value = 15
-    - 32 bits: single-point precision
-        - has 24 significand bits (including sign bit),
-          8 bits for the exponent
-        - bias value = 127
-    - 64 bits: double precision
-        - has 53 significant bits (including sign bit)
-        - bias value = 1023
-    - There is a quadruple and Octuple precision, 
-      but it will not be discussed further
+* IEE 754 is similar to the sign-exponent-mantissa representation
+* but, this representation has a problem, there's many ways to 
+  represent the SAME number
+* this creatues issues of ambiguaity, comparison, and precision
+* the IEE 754 representation solves these problems 
+* the mantissa (significand) is always normalized to have ONE POSITIVE
+  digit before the decimal point
+* example:
+    0.15625 * 2^5 becomes 1.5625 * 2^3
+* Implicit Normalization: the first bit of the mantissa is assumed to be
+  1, so it's not stored
+* example:
+    1.101 X 2^3 would be stored as 101 and the 1 is understood
+* the purpose of normalizatoin is to ensure precision
+* the standardization is necessary for consistent calculations for computer systems
+* IEE 754 has possible precision levels based on the number of bits to dictate bias
+* the number of bits allocated to store a floating-point number affects its precision
+* the different formats of floating-point representation:
+    * half-precision
+    * single-precision
+    * double-precision
+* the significand/mantissa stores the 'digits' and precision of the number
+* the exponent determines the scale of the number represented by powers of 2
+* 'bias' value is added to the exponet to ensure all exponent values can be 
+   represented as unsigned in memory
+* PRECISION LEVELS TO DICTATE BIAS:
+    * 16 bit: HALF precision
+        * 16 bits
+        * 1 signed bit
+        * exponent is 5 bits
+        * significand/mantissa is 10 bits
+        * bias value is 15 2^(exponent bits -1) - 1 = 15
+        * example: half precision with exponent of 3
+            15 + 3 = 18
+    * 32 bit: SINGLE precision
+        * 32 bits
+        * 1 signed bit
+        * exponent is 8 bits
+        * significand/mantissa is 23 bits
+        * bias value is 127 2^(exponent bits -1) - 1 = 127
+        * most commonlyused in graphics, physical simulations, etc
+    
+    * 64 bit: DOUBLE precision
+        * 64 bits
+        * 1 signed bit
+        * exponent is 11 bits
+        * significand/mantissa is 52 bits
+        * bias value is 1023 2^(exponent bits -1) - 1 = 1023
+        * used in areas that require high precision
+* There is a quadruple and Octuple precision, but it will not be discussed further
 
     - Extra Notes:
         - in the case of the following for exponent = E, mantissa = m, sign = s:
@@ -230,7 +260,7 @@ Examples:
 
 - Convert -4.25 to single point precision IEEE 754 floating point number:
 Step 1: convert base number (ignoring sign) to binary:
-    - 4.25 -> 100.01
+    - 4.25 -> 100.01 
 
 Step 2: Use implicit normalization to shift the radix point (decimal point)
         to the right of the most significant bit with a value of 1.

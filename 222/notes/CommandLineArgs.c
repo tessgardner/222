@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]) {
 // a standard signature for talking in command line arguments
 // argc represents the number of arguments coming in
-// argv is a pointer to wehre the arguments are stored in memory
+// argv is a pointer to where the arguments are stored in memory
 
 	// printing inputs
 	printf("argc: %d\n", argc);

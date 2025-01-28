@@ -14,7 +14,7 @@ int main() {
 
     while (intInput >= 0) {
         // geting input....
-        printf("Enter a number of seconds to convert: ");
+        printf("Enter an integer: ");
         scanf("%d", &intInput);
 
         // setting up variables to work with current input

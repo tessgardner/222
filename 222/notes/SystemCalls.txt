@@ -1,0 +1,289 @@
+System calls
+
+Overview:
+    - Operating system Overview
+    - Control flow
+    - Processes
+    - Context Switching
+    - Process Control
+
+Computer system components:
+    - The hardware
+    - The operating system
+    - Applications and programs
+    - Users
+
+Operating System
+    - The OS is a program that has two main jobs:
+        - It manages the resources of the computer, including perifpheral, files, and 
+          memory
+        - It coordinates all other programs running on a computer
+
+        |       Application programs        |   <- Software
+        |               OS                  |   <- Software
+        | CPU   |   Memory   | I/O Devices  |   <- Hardware
+
+    - Examples of OS tasks:
+        - Controls and coordinates use of hardware among various applications and Users
+        - Provides resource management and an 'application runtime system'
+        - Provides CPU scheduling, memory, and file management
+        - Facilitates the use of hardware and software resources in an efficient,
+          fair, and secure way (particularly in multiuser systems)
+        - Error Detection
+        - Accounting (i.e. resource utilization, performance monitoring,
+          scheduling decisions)
+
+    - Three fundamental abstractions:
+        - Processes: instances of running programs. Multiple processes can run concurrently
+          on the same system, and each process has exclusive access to the hardware.
+        - Virtual memory: an abstraction that provides each process with the illusion
+          that it has exclusive use of the main memory. (usually processes all have a 
+          uniform view of memory known as virtual address space)
+        - File: sequence of bytes
+
+Processes:
+    - Usually defined as the following:
+        - An instance of a running program
+        - A program in execution
+        - Entity that can be assigned to and executed on by a processor
+    - Processes provide each program with two key abstractions:
+        - Logical control flow: Each program seems to have exclusive use of the CPU
+        - Private address space: Each program seems to have exclusive use of main memory 
+
+
+    - Logical control flows:
+        - Each process has its own logical control flows 
+        - Two processes are 'concurrent' if their flows overlap in time
+            - Otherwise, they are 'sequential'
+
+        - Example: Consider three processes with the following start and ending times:
+
+                Process         Start time          End time
+                    A               1                  3
+                    B               2                  5
+                    C               4                  6
+
+        For each pair of processes, indicate if they are sequential or concurrent:
+            - (AB): Concurrent  
+            - (BC): Concurrent
+            - (AC): Sequential 
+
+    - Concurrent Processes:
+        - Control flows for concurrent processes are physically disjoint in time 
+        - However, we can think of concurrent processes as running in parallel with
+          each other.
+
+    - 'Context Switching'
+        - Processes are managed by a shared chunk of the OS called the 'kernel'
+            - It is important to note that the kernel is not a separate process, as 
+              it runs as part of an existing process.
+        - Control flow passes from one process to another via a context switch        
+        
+    - Process States 
+        - Five possible states for every process: 
+            - New
+                - Process being created 
+            - Ready
+                - Waiting to be given processor time (waiting to be scheduled)
+            - Running 
+                - Process is executing
+            - Stopped 
+                - Process execution is suspended (typically waiting for an event to occur
+                  such as user input, or resources to become available)
+            - Terminated
+                - Process is stopped permanently
+
+    - System calls
+        - An OS is a collection of programs, the "heart" of which is the kernel
+        - The kernel provides a set of functions to other programs called 'system calls'
+            - System calls are used to request access to certain resources of the machine,
+              to communicate with other currently running programs, and to start new
+              programs.
+
+        - Modern Unix kernals provide several hundred different system calls
+            - These system calls are typically broken down into families of functions,
+              each of which target a specific purpose or type of operation.
+        - Examples:
+            - Memory management system calls ask the OS to manipulate a block of memory
+              in some manner
+            - Time management system calls ask the OS to access the system clock in some
+              cases acting based on its value
+            - File system calls ask the OS to access a file or device (open(), read()
+              write(), close())
+            - Process system calls ask the OS to run another program, or controls However
+              it runs (fork(), execl(), execvp(), and wait())
+
+    - Obtaining the Process ID (PID):
+        - This can be accomplished by using some C commands
+            - pid_t getpid(void)
+                - returns the PID of the current process
+            - pid_t getppid(void)
+                - Returns the PID of the parent process
+
+    - Fork(): creating a new process 
+        - We can create new processes by using two libraries:
+            - sys/types.h
+            - unistd.h
+        - the main command that allows for this is: pid_t fork(void)
+            - This creates a new process (child) that is identical to the calling process
+              (parent)
+            - Returns 0 to the child process
+            - Returns the child's PID to the parent process  
+        
+        void fork1(){
+            if(fork() == 0){
+                printf("Hello from child\n");
+            } else {
+                printf("Hello from parent\n);
+            }
+        }
+        - Parent and child both run the same code
+            - can distinguish the parent from the child by the return value from fork()
+
+        void fork2(){
+            printf("L0\n");
+            fork();
+            printf("L1\n");
+            fork();
+            printf("Bye\n");
+        }
+        - Both child and parent can continue forking
+
+        void fork3(){
+            printf("L0\n");
+            if(fork() != 0){
+                printf("L1\n");
+                if(fork() != 0){
+                    printf("L2\n");
+                    fork();
+                }
+            }
+            printf("Bye\n");
+        }
+
+        void fork4(){
+                printf("L0\n");
+                if(fork() == 0){
+                        printf("L1\n");
+                        if(fork() == 0){
+                            printf("L2\n");
+                            fork();
+                        }
+                }
+                printf("Bye\n");
+        }
+
+    - exit: Terminating processes
+        - Recieving a signal whose default action is to terminate 
+        - Returning from the main routine
+        - Calling the exit functions
+
+        -exit function:
+            - void exit(int status)
+            - Terminates with an "exit status" of status
+            - Convention: normally returns status 0, or nonzero on an error 
+            - Another way to explicitly set the exit status is to return an integer
+              value from the main routine.
+            - include stdlib.h 
+        - exit is called once, but never returns
+    
+    - Zombies
+        - When a process terminates, it still consumes system resources
+        - ex: Exit status - can be held in memory until another process (often the parent)
+          process) retrieves it.
+        - ex2: By the various tables maintained by OS - OS has several tables to maintain 
+          processes. Even after a process terminates, entries related to that process 
+          might remain in these tables until they are explicitly removed or overwritten
+        - These "dead" processes that still consume resources are called zombies.
+    - Reaping:
+        - Performed by parent on terminated child (using wait or waitpid)
+        - Parent is given exit status information
+        - Kernel then deletes zombie child process 
+    - If the parent doesn't reap:
+        - If any parent is terminated without reaping a child, then the child will be reaped
+          by initializing process (init process will reap and collect resources back)
+
+    Example:
+        int main(){
+            if (fork() == 0){
+                /*child*/
+                printf("Terminating child, PID = %d\n", getpid());
+                exit(0);
+            }
+            else {
+                printf("Running parent, PID = %d\n", getpid());
+                while(1);
+            }
+            return 0;
+        }
+        - ps command shows child process state
+        - killing parent allows child to be reaped 
+
+    Example 2:
+        int main(){
+            if (fork() == 0){
+                /*child*/
+                printf("Terminating child, PID = %d\n", getpid());
+                while(1);
+            }
+            else {
+                printf("Running parent, PID = %d\n", getpid());
+                exit(0));
+            }
+            return 0;
+        }
+    
+    - wait: Synchronizing with children
+    - using library wait.h 
+    - int wait(int *child_status)
+        - Suspends current process until one of its children terminates 
+        - Return value is the pid of the child process that terminated 
+        - If child_status != NULL, then the object it points to will be set to a status 
+          indicating why the child process terminated.
+
+    - Example
+        int main(){
+            int child_status;
+
+            if(fork() == 0){
+                printf("hello from the child\n");
+            } else{
+                printf("hello from the parent\n");
+                wait(&child_status);
+                printf("child has terminated\n");
+            }
+            printf("Bye\n");
+            return 0;
+        }
+    
+    - Status macros from wait:
+        - WIFEXITED - gives us the current status value (if checking)
+        - WEXITSTATUS - gives us the specific exit status of a child
+
+    - Example:
+            int main(){
+            pid_t pid[10];
+            int i, child_status;
+
+            for(i = 0; i < 10; i ++){
+                 if((pid[i] = fork()) == 0){
+                    exit(100+i); //child
+                }
+            }
+            for(i = 0; i < 10; i++){
+                pid_t wpid = wait(&child_status);
+                if(WIFEXITED(child_status)){
+                    printf("Child %d terminated with exit status %d\n", wpid, WEXITSTATUS(child_status));
+                } else{
+                    printf("Child %d terminated abnormally\n", wpid);
+                }
+            }
+            return 0;
+          }
+
+    - Waiting for a specific process
+        - waitpid(pid, &status, options)
+            -options:
+                - 0 (no options)
+                - WNOHAND - returns right away if no child has exited
+                - WCONTINUED - returns if a stopped child has been resumed

@@ -287,3 +287,73 @@ Processes:
                 - 0 (no options)
                 - WNOHAND - returns right away if no child has exited
                 - WCONTINUED - returns if a stopped child has been resumed
+
+    - Example:
+            int main(){
+            pid_t pid[10];
+            int i, child_status;
+
+            for(i = 0; i < 10; i ++){
+                 if((pid[i] = fork()) == 0){
+                    exit(100+i); //child
+                }
+            }
+            for(i = 0; i < 10; i++){
+                pid_t wpid = waitpid(pid[i], &child_status, 0);
+                if(WIFEXITED(child_status)){
+                    printf("Child %d terminated with exit status %d\n", wpid, WEXITSTATUS(child_status));
+                } else{
+                    printf("Child %d terminated abnormally\n", wpid);
+                }
+            }
+            return 0;
+          }
+
+
+    - Exec() family of functions:
+        - exec() - loads and runs a new program in the context of the current process 
+
+        - execl()
+            - int execl(char *path, char *arg0, char *arg1,..., NULL)
+            - Loads and runs executable at path with args (arg0, arg1, etc.)
+            - Path is the complete path of the exectuable (ex: /bin/ls)
+            - Arg0 becomes the name of the executable (ex: ls)
+            - "real" arguments to the executable start with arg1, etc (ex: -al, -h) 
+            - List of args is terminated by a NULL arguement
+            - Returns -1 if error, otherwise it does not return 
+
+        - Example
+            int main(){
+                if(fork()==0){
+                    execl("/bin/ls", "ls", "-la", "-h", NULL);
+                }
+                wait(NULL);
+                printf("Listing complete\n");
+                return 0;
+            }
+
+        - execle()
+            - int execle(char *path, char *arg0, char *arg1, ..., NULL, char *envp[])
+            - Loads and runs in the current process:
+                - Executable file "filename"
+                    - Can be an object file or script file beginning with #!interpreter
+                      (ex: #!/bin/bash)
+                    - arg0, by convention is "filename"
+                    - environment variables are listed in envp
+                        - "name=value" strings (ex: LOGNAME=owner)
+            - Called once, does not return unless there is an error 
+
+        - execlp()
+            - int execlp(char *filename, char *arg0, char *arg1, ..., NULL)
+            - Loads and runs in the current process:
+                - Executable file "filename"
+                    - can be object file or script file beginning with #!interpreter
+                    - with arguments arg0, arg1 
+            - Uses the defualt PATH to find executable 
+
+        - execvp()  -- likely used in project 
+            - int execvp(char *filename, char *args[])
+            - Loads and runs in the current process:
+                - Executable file "filename"
+                - with NULL terminated argument array args[]
+            - Uses the default PATH to find exectuable

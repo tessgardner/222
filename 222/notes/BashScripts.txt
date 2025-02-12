@@ -1,0 +1,171 @@
+- Overview:
+    - What is Bash?
+    - Input:
+        - Prompting the user
+        - Command line arguments
+    - Decision making:
+        - If-then-else statements
+        - Case statements
+    - Repetition:
+        - Do-while
+        - For
+        - Selection statements
+    - Functions
+
+- What is Shell/Bash?
+    - The shell is a command line interpreter that provides interface to 
+      Unix OS 
+    - Both a command line interpreter and a scripting language
+        - As a command interpreter, the shell provides the user a rich set 
+          of GNU utilities
+        - The scripting language allows these utilites to be combined. 
+          Files containing commands can be created and become commands 
+          themselves.
+        - Bash is the shell, or command language interpreter for the GNU 
+          operating system.
+            - Bash is an acronym for "bourne-again shell", named after 
+              Stephen Bourne, the author of shell (sh), the direct ancestor 
+              of Bash 
+        - What Shell are we on?
+            - Check with the command: echo $SHELL 
+
+- Shell scripting   
+    - A script is a file that contains shell commands:
+        - Has the extension .sh 
+        - Data structure: variables
+        - Control structure: Sequence, Decision, Loops (Sequence, selection, repetition)
+    - Always starts with the "shebang" line. Always the first line of the file
+        - #!/bin/bash 
+
+    - Running a shell script:
+        - Any line after the shebang, that starts with a # is a comment.
+        - run with the command: bash script.sh
+            or 
+        - chmod +x script.sh
+        - ./script.sh 
+
+- User Input:
+    - The shell can prompt for user input 
+        - Syntax:
+            read varname [more vars]
+            or
+            read -p "message" varname [more vars]
+    - Values entered by user are assigned to variables varname and 
+      "more vars" 
+
+- Variables in shell:
+    - System Variables
+        - $SHELL
+        - $LOGNAME
+        - $PWD
+    - User defined variables
+        - var_name=value #no spaces 
+        - echo "$var_name"
+    - Special variables 
+        Variable            Meaning 
+        $0                  Name of the current shell script 
+        $1-9                Positional parameters 1-9 of the script 
+        $#                  Number of parameters in the script 
+        $*                  All parameters as one string 
+        $@                  All parameters as a set of strings 
+        $?                  Return status of the most recently executed 
+                            command 
+        $$                  PID of the current process 
+
+- Quotes in shell:
+    - Single quotes imply a literal string 
+        var=2
+        echo 'value is $var'
+        This would print out "value is $var"
+    - Double quotes replace variables with their values:
+        var=2
+        echo "value $var"
+        This would print out "value is 2"
+
+- Control structures:
+    - Shell has the following control structures:
+        - if-then-else
+        - case 
+        - loops 
+            - for 
+            - while 
+            - until 
+
+    - If statements:
+        - Syntax:
+        if command 
+        then 
+            statement 
+        fi 
+        OR 
+        if command; then
+            statements 
+        fi 
+        - Statements only execute if the command succeeds
+
+        - If statements usually use the TEST command which has the following 
+          syntax:
+          - test expression OR [ expression ]
+
+        - If-then-else
+            if [ condition ]; then
+                statement1
+            else
+                statement2
+            fi 
+        
+        - If-then-elif-else
+            if [ condition ]; then
+                statement1
+            elif [ condition ]; then
+                statement2
+            else
+                statement3
+            fi 
+    
+- Relational Operators 
+    - Numeric Operators:
+        Operator            Meaning 
+        -gt                 Greater than (>)
+        -lt                 Less than (<)
+        -ge                 Greater than or equal to 
+        -le                 Less than or equal to 
+        -eq                 Equal 
+        -ne                 Not equal 
+
+    - String operators:
+        - Works on the ASCII values, not just length 
+        Operator            Meaning 
+        = or ==             Equal 
+        !=                  Not equal 
+        str1 < str2         str1 is less than str2 
+        str1 > str2         str1 is greater than str2 
+        -n str              str length is greater than 0 
+        -z str              String str length is zero 
+
+- Compound logical expressions:
+    - && -> and 
+    - || -> or 
+    - must be enclosed in [[     ]]
+
+- File flags 
+    Flags           Meaning
+    -d file         True if "file" is a directory
+    -f file         True if "file" is a file 
+    -r              True if "file" is readable 
+    -w              True if "file" is writable 
+    -x              True if "file" is executable 
+    -s              True if length of "file" is nonzero 
+
+- Case Statements
+    - Similar to switch-case in C 
+    - Syntax:
+        case $word in 
+            pattern1) command-list1
+            ;;
+            pattern2 | pattern3) command-list2
+            ;;
+            patternN) command-listN 
+            ;;
+        esac
+    - Multiple patterns can be listed with |

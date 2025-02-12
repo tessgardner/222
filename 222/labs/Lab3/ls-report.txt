@@ -1,0 +1,5 @@
+total 24
+-rw-rw-r-- 1 tng018 tng018   312 Feb 11 19:36 checksum.h
+-rw-rw-r-- 1 tng018 tng018 16328 Feb 11 19:36 checksum.lib
+-rw-rw-r-- 1 tng018 tng018     0 Feb 12 03:41 ls-report.txt
+-rw-rw-r-- 1 tng018 tng018   709 Feb 12 03:40 template.c

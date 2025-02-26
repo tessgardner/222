@@ -1,0 +1,6 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+tng018      1783  0.0  0.1 233068  6016 tty2     Ssl+ Feb24   0:00 /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+tng018      1788  0.0  0.3 295608 15104 tty2     Sl+  Feb24   0:00 /usr/libexec/gnome-session-binary --session=ubuntu
+tng018      2820  0.0  0.1   8924  5120 pts/0    Ss   Feb24   0:00 /usr/bin/bash --init-file /usr/share/code/resources/app/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+tng018     11358  0.0  0.0   2680  1536 pts/0    S+   04:20   0:00 ./techshell
+tng018     11917  250  0.1  11016  4608 pts/0    R+   04:23   0:00 ps u
